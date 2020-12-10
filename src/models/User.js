@@ -1,0 +1,56 @@
+import mongoose, { Schema } from 'mongoose';
+import { Hash } from '@src/utils/hash';
+import logger from '@src/logger';
+
+const CUSTOM_VALIDATION = {
+  DUPLICATED: 'DUPLICATED',
+};
+
+const schema = new Schema(
+  {
+    name: {
+      type: String,
+      required: [true, 'nome é obrigatório'],
+    },
+    email: {
+      type: String,
+      required: [true, 'email é obrigatório'],
+      unique: true,
+    },
+    password: {
+      type: String,
+      required: [true, 'senha é requerido'],
+    },
+  },
+  {
+    toJSON: {
+      transform: (_, ret) => {
+        ret.id = ret._id;
+
+        delete ret._id;
+        delete ret.__v;
+      },
+    },
+  }
+);
+
+schema.path('email').validate(
+  async (email) => {
+    const count = await mongoose.models.User.countDocuments({ email });
+    return !count;
+  },
+  'email já existe',
+  CUSTOM_VALIDATION.DUPLICATED
+);
+
+schema.pre('save', async function () {
+  if (!this.password || !this.isModified('password')) return;
+  try {
+    const hashPassword = await Hash.generateHash(this.password);
+    this.password = hashPassword;
+  } catch (error) {
+    logger.error(`Error hashing the password for the user ${this.name}`);
+  }
+});
+
+export const User = mongoose.model('User', schema);
