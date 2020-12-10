@@ -1,0 +1,49 @@
+{
+  "name": "fb-quest",
+  "version": "1.0.0",
+  "description": "",
+  "main": "src/index.js",
+  "scripts": {
+    "dev": "nodemon",
+    "lint": "eslint ./src --ext .js",
+    "lint:fix": "eslint ./src --ext .js --fix",
+    "test:e2e": "jest --projects ./test --runInBand",
+    "test:unit": "jest",
+    "test": "npm run test:e2e && npm run test:unit"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/jardelgoncalves/fb-quest.git"
+  },
+  "author": "Jardel Gonçalves <jardelgoncalves.dev>",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/jardelgoncalves/fb-quest/issues"
+  },
+  "homepage": "https://github.com/jardelgoncalves/fb-quest#readme",
+  "devDependencies": {
+    "@babel/cli": "^7.12.8",
+    "@babel/core": "^7.12.9",
+    "@babel/node": "^7.12.6",
+    "@babel/plugin-proposal-object-rest-spread": "^7.12.1",
+    "@babel/preset-env": "^7.12.7",
+    "@commitlint/cli": "^11.0.0",
+    "@commitlint/config-conventional": "^11.0.0",
+    "@jest/globals": "^26.6.2",
+    "babel-jest": "^26.6.3",
+    "eslint": "^7.15.0",
+    "eslint-config-airbnb-base": "^14.2.1",
+    "eslint-config-prettier": "^7.0.0",
+    "eslint-plugin-import": "^2.22.1",
+    "eslint-plugin-prettier": "^3.2.0",
+    "husky": "^4.3.5",
+    "jest": "^26.6.3",
+    "nodemon": "^2.0.6",
+    "prettier": "^2.2.1",
+    "supertest": "^6.0.1"
+  },
+  "dependencies": {
+    "express": "^4.17.1",
+    "module-alias": "^2.2.2"
+  }
+}
