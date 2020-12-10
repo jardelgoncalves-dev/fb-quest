@@ -1,22 +1,14 @@
 module.exports = {
   env: {
-    "jest/globals": true,
     node: true,
     es2021: true,
+    jest: true,
   },
   extends: ['airbnb-base', 'prettier'],
   plugins: ['prettier'],
   parserOptions: {
     ecmaVersion: 12,
     sourceType: 'module',
-  },
-  settings: {
-    'import/resolver': {
-      node: {
-        paths: ['src', 'test'],
-        extensions: ['.js'],
-      },
-    },
   },
   rules: {
     'no-underscore-dangle': 'off',
@@ -28,5 +20,16 @@ module.exports = {
     'no-param-reassign': 'off',
     camelcase: 'off',
     'no-unused-vars': ['error', { argsIgnorePattern: 'next' }],
+  },
+  settings: {
+    'import/resolver': {
+      alias: {
+        map: [
+          ['@src', './src'],
+          ['@test', './test'],
+        ],
+        extensions: ['.ts', '.js', '.jsx', '.json'],
+      },
+    },
   },
 };
