@@ -1,7 +1,7 @@
 import supertest from 'supertest';
 import { Server } from '@src/server';
 
-let server = new Server();
+const server = new Server();
 
 beforeAll(async () => {
   await server.init();
