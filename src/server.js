@@ -1,5 +1,7 @@
 import './utils/moduleAlias';
 import express from 'express';
+import expressPinoLogger from 'express-pino-logger';
+import logger from './logger';
 
 export class Server {
   constructor(expressApp = express, port = process.env.PORT || 3333) {
@@ -16,6 +18,11 @@ export class Server {
 
   _setupMiddlewares() {
     this.app.use(this.express.json());
+    this.app.use(
+      expressPinoLogger({
+        logger,
+      })
+    );
   }
 
   _setupControllers() {}
@@ -26,7 +33,7 @@ export class Server {
 
   start() {
     this.app.listen(this.port, () => {
-      console.log(`Server listening of port: ${this.port}`);
+      logger.info(`Server listening of port: ${this.port}`);
     });
   }
 
