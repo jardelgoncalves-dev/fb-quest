@@ -1,6 +1,7 @@
 import mongoose, { Schema } from 'mongoose';
 import { Hash } from '@src/utils/hash';
 import logger from '@src/logger';
+import { checkEmail, auth } from './__utils';
 
 const CUSTOM_VALIDATION = Object.freeze({
   DUPLICATED: 'DUPLICATED',
@@ -52,5 +53,8 @@ schema.pre('save', async function () {
     logger.error(`Error hashing the password for the user ${this.name}`);
   }
 });
+
+schema.statics.checkEmail = checkEmail;
+schema.statics.checkEmail = auth;
 
 export const User = mongoose.model('User', schema);
