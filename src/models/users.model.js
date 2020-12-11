@@ -49,6 +49,9 @@ schema.pre('save', async function () {
   try {
     const hashPassword = await Hash.generateHash(this.password);
     this.password = hashPassword;
+
+    if (!this.email || !this.isModified('email')) return;
+    this.email = this.email.toLowerCase();
   } catch (error) {
     logger.error(`Error hashing the password for the user ${this.name}`);
   }
