@@ -12,7 +12,10 @@ export const auth = async function ({ email, password }) {
   if (!isPasswordMatch) return null;
 
   const token = Hash.generateToken({ id: user.id });
-  user.password = undefined;
 
-  return { token, user };
+  user.id = user._id;
+  delete user._id;
+  delete user.__v;
+
+  return { user, token };
 };
