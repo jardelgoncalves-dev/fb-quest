@@ -1,5 +1,10 @@
 import './utils/moduleAlias';
+import './utils/locale-yup';
 import express from 'express';
+import expressPinoLogger from 'express-pino-logger';
+import logger from './logger';
+import * as database from './database';
+import routes from './routes';
 
 export class Server {
   constructor(expressApp = express, port = process.env.PORT || 3333) {
@@ -10,23 +15,34 @@ export class Server {
 
   async init() {
     this._setupMiddlewares();
-    this._setupControllers();
+    this._setupRouters();
     await this._setupDatabase();
   }
 
   _setupMiddlewares() {
     this.app.use(this.express.json());
+    this.app.use(
+      expressPinoLogger({
+        logger,
+      })
+    );
   }
 
-  _setupControllers() {}
+  _setupRouters() {
+    this.app.use('/', routes);
+  }
 
-  _setupDatabase() {}
+  async _setupDatabase() {
+    await database.connect();
+  }
 
-  close() {}
+  async close() {
+    await database.close();
+  }
 
   start() {
     this.app.listen(this.port, () => {
-      console.log(`Server listening of port: ${this.port}`);
+      logger.info(`Server listening of port: ${this.port}`);
     });
   }
 

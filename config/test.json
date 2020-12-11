@@ -1,0 +1,10 @@
+{
+  "App": {
+    "database": {
+      "mongoUrl": "mongodb://localhost:27017/fb-quest-test"
+    },
+    "logger": {
+      "enabled": false
+    }
+  }
+}
