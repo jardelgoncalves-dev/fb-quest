@@ -13,7 +13,7 @@ export class UsersService extends ServiceBase {
 
   async doCreate({ data }) {
     if (await this.Model.checkEmail(data)) {
-      return errorResponse({ error: 'Email já existente' }, 409);
+      return errorResponse({ error: 'email já existente' }, 409);
     }
 
     return super.doCreate({ data });
