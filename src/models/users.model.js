@@ -55,6 +55,6 @@ schema.pre('save', async function () {
 });
 
 schema.statics.checkEmail = checkEmail;
-schema.statics.checkEmail = auth;
+schema.statics.auth = auth;
 
 export const User = mongoose.model('User', schema);
