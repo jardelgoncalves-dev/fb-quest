@@ -2,9 +2,9 @@ import mongoose, { Schema } from 'mongoose';
 import { Hash } from '@src/utils/hash';
 import logger from '@src/logger';
 
-const CUSTOM_VALIDATION = {
+const CUSTOM_VALIDATION = Object.freeze({
   DUPLICATED: 'DUPLICATED',
-};
+});
 
 const schema = new Schema(
   {
