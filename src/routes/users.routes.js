@@ -1,8 +1,13 @@
 import UsersController from '@src/controllers/users.controller';
 
-export default (router, serviceManager) => {
+export default (routerInstance, serviceManager, middlewares = {}) => {
+  const router = routerInstance();
+
   const usersController = UsersController(serviceManager);
-  router.post('/users', usersController.store);
+  router.post('/', usersController.store);
+
+  router.use(middlewares.auth);
+  router.get('/me', usersController.find);
 
   return router;
 };
