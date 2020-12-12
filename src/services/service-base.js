@@ -2,10 +2,11 @@ import logger from '@src/logger';
 import { errorResponse, successResponse } from '@src/utils/response';
 
 export class ServiceBase {
-  constructor({ serviceManager, model, schema }) {
+  constructor({ serviceManager, model, schema, alias }) {
     this.serviceManager = serviceManager;
     this.Model = model;
     this.schema = schema || undefined;
+    this.alias = alias || 'recurso';
   }
 
   async _applySchema(fnOperation, data) {
@@ -31,11 +32,14 @@ export class ServiceBase {
       populate.fields || ''
     );
 
+    if (!entity)
+      return errorResponse({ error: `${this.alias} não encontrado(a)!` });
+
     return successResponse(entity, 200);
   }
 
   async doFindAll({ query = {}, populate = {} }) {
-    const entity = await this.Model.find(query).populate(
+    const entity = await this.Model.find(query || {}).populate(
       populate.table || '',
       populate.fields || ''
     );
@@ -43,7 +47,7 @@ export class ServiceBase {
   }
 
   async doUpdate({ query = {}, data = {} }) {
-    const entity = await this.Model.findOne(query);
+    const entity = await this.Model.findOne(query || {});
     entity.set(data);
     await entity.save();
 
@@ -51,7 +55,7 @@ export class ServiceBase {
   }
 
   async doDelete({ query }) {
-    await this.Model.deleteOne(query);
+    await this.Model.deleteOne(query || {});
     return successResponse({}, 204);
   }
 
@@ -72,6 +76,6 @@ export class ServiceBase {
   }
 
   async delete({ query }) {
-    return () => this.doDelete({ query });
+    return this.doDelete({ query });
   }
 }

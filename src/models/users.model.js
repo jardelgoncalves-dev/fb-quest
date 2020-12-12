@@ -7,6 +7,11 @@ const CUSTOM_VALIDATION = Object.freeze({
   DUPLICATED: 'DUPLICATED',
 });
 
+export const ROLES = Object.freeze({
+  ADMIN: 'ADMIN',
+  CLIENT: 'CLIENT',
+});
+
 const schema = new Schema(
   {
     name: {
@@ -20,7 +25,18 @@ const schema = new Schema(
     },
     password: {
       type: String,
-      required: [true, 'senha é requerido'],
+      required: [true, 'senha é obrigatória'],
+    },
+    role: {
+      type: String,
+      enum: Object.freeze([ROLES.ADMIN, ROLES.CLIENT]),
+      default: ROLES.CLIENT,
+      validate: {
+        validator(value) {
+          return !!ROLES[value];
+        },
+        message: (props) => `${props.value} não é permitido!`,
+      },
     },
   },
   {
