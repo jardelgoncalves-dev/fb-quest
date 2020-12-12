@@ -45,6 +45,7 @@
     "supertest": "^6.0.1"
   },
   "dependencies": {
+    "@jest/globals": "^26.6.2",
     "bcrypt": "^5.0.0",
     "config": "^3.3.3",
     "express": "^4.17.1",
