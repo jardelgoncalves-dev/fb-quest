@@ -1,8 +1,10 @@
 import AuthController from '@src/controllers/auth.controller';
 
-export default (router, serviceManager) => {
+export default (routerInstance, serviceManager) => {
+  const router = routerInstance();
+
   const authController = AuthController(serviceManager);
-  router.post('/auth', authController.store);
+  router.post('/', authController.store);
 
   return router;
 };
