@@ -6,6 +6,7 @@ import { isAdmin } from '@src/middlewares/isAdmin.middleware';
 import usersRoutes from './users.routes';
 import authRoutes from './auth.routes';
 import questionsRoutes from './questions.routes';
+import groupQuestionsRoutes from './group-questions.routes';
 
 const serviceManager = new ServiceManager({ models });
 
@@ -17,6 +18,10 @@ router.use('/auth', authRoutes(express.Router, serviceManager));
 router.use(
   '/questions',
   questionsRoutes(express.Router, serviceManager, { isAdmin, auth })
+);
+router.use(
+  '/group-questions',
+  groupQuestionsRoutes(express.Router, serviceManager)
 );
 
 export default router;
