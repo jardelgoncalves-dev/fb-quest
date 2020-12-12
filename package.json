@@ -5,6 +5,7 @@
   "main": "src/index.js",
   "scripts": {
     "dev": "nodemon | pino-pretty -c",
+    "seed": "babel-node seeds/index.js",
     "lint": "eslint ./src --ext .js",
     "lint:fix": "eslint ./src --ext .js --fix",
     "test:e2e": "jest --projects ./test --runInBand",
