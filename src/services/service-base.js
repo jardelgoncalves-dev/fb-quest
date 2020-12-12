@@ -26,12 +26,19 @@ export class ServiceBase {
   }
 
   async doFindOne({ query = {}, populate = {} }) {
-    const entity = await this.Model.findOne(query).populate(populate).lean();
+    const entity = await this.Model.findOne(query).populate(
+      populate.table || '',
+      populate.fields || ''
+    );
+
     return successResponse(entity, 200);
   }
 
   async doFindAll({ query = {}, populate = {} }) {
-    const entity = await this.Model.find(query).populate(populate).lean();
+    const entity = await this.Model.find(query).populate(
+      populate.table || '',
+      populate.fields || ''
+    );
     return successResponse(entity, 200);
   }
 
@@ -53,11 +60,11 @@ export class ServiceBase {
   }
 
   async findOne({ query = {}, populate = {} }) {
-    return this._applySchema(() => this.doFindOne({ query, populate }));
+    return this.doFindOne({ query, populate });
   }
 
   async findAll({ query = {}, populate = {} }) {
-    return this._applySchema(() => this.doFindAll({ query, populate }));
+    return this.doFindAll({ query, populate });
   }
 
   async update({ query = {}, data = {} }) {
@@ -65,6 +72,6 @@ export class ServiceBase {
   }
 
   async delete({ query }) {
-    return this._applySchema(() => this.doDelete({ query }));
+    return () => this.doDelete({ query });
   }
 }
