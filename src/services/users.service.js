@@ -8,6 +8,7 @@ export class UsersService extends ServiceBase {
       serviceManager,
       model: serviceManager.models.User,
       schema: usersSchema,
+      alias: 'usuário',
     });
   }
 

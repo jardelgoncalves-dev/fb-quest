@@ -8,6 +8,7 @@ export class AuthService extends ServiceBase {
       serviceManager,
       model: serviceManager.models.User,
       schema: authSchema,
+      alias: 'usuário',
     });
   }
 
