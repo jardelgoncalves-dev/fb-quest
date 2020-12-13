@@ -1,6 +1,7 @@
 import { examsSchema } from '@src/schema/exams.schema';
 import { QUESTION_TYPES } from '@src/utils/constants';
-import { successResponse } from '@src/utils/response';
+import { errorResponse, successResponse } from '@src/utils/response';
+import { STATUS } from '@src/models/exams.model';
 import { ServiceBase } from './service-base';
 
 export class ExamsService extends ServiceBase {
@@ -9,7 +10,7 @@ export class ExamsService extends ServiceBase {
       serviceManager,
       model: serviceManager.models.Exam,
       schema: examsSchema,
-      alias: 'exames',
+      alias: 'questionario',
     });
     this.Question = serviceManager.models.Question;
   }
@@ -40,6 +41,7 @@ export class ExamsService extends ServiceBase {
           materia: { $in: materia },
         },
       ],
+      disponivel: true,
     })
       .sort({ numeroQuestao: 'asc' })
       .limit(42);
@@ -53,5 +55,47 @@ export class ExamsService extends ServiceBase {
     await exam.save();
 
     return successResponse(exam, 200);
+  }
+
+  async verifyQuestion({ questionId, examId, alternativaId, usuario }) {
+    const exam = await this.Model.findOne({ _id: examId, usuario });
+    if (!exam)
+      return errorResponse({ error: 'questionário não encontrado' }, 404);
+
+    const questionIndex = exam.questoes.findIndex(
+      (q) => String(q) === questionId
+    );
+    if (questionIndex === -1)
+      return errorResponse({ error: 'questão não encontrado' }, 404);
+
+    const question = await this.Question.findOne({ _id: questionId }).lean();
+    if (!question)
+      return errorResponse({ error: 'questão não encontrado' }, 404);
+
+    const [myResponse] = question.alternativas.filter(
+      (a) => String(a._id) === alternativaId
+    );
+
+    const [correct] = question.alternativas.filter((a) => a.correta);
+
+    const isLastQuestion = exam.questoes.length - 1 === questionIndex;
+    exam.set({
+      ultimaQuestao: questionId,
+      status: isLastQuestion ? STATUS.FINALIZADO : STATUS.INICIADO,
+      acertos: myResponse.correta ? exam.acertos + 1 : exam.acertos,
+    });
+
+    await exam.save();
+
+    return successResponse(
+      {
+        correta: myResponse.correta,
+        detalhes: {
+          alternativa: correct,
+          resolucao: question.resolucao,
+        },
+      },
+      200
+    );
   }
 }
