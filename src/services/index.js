@@ -2,6 +2,7 @@ import { UsersService } from './users.service';
 import { AuthService } from './auth.service';
 import { QuestionsService } from './questions.service';
 import { GroupQuestionsService } from './group-questions.service';
+import { ExamsService } from './exams.service';
 
 const SERVICE = Symbol('services');
 
@@ -25,5 +26,9 @@ export class ServiceManager {
 
   get groupQuestions() {
     return new GroupQuestionsService(this);
+  }
+
+  get exams() {
+    return new ExamsService(this);
   }
 }
