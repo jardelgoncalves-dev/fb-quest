@@ -4,8 +4,8 @@ export const questionsSchema = yup
   .object()
   .shape({
     materia: yup.string().required(),
-    vestibular: yup.string().required(),
-    resolucao: yup.string().required(),
+    vestibular: yup.string(),
+    resolucao: yup.string(),
     enunciado: yup.string().required(),
     numeroQuestao: yup.number().required(),
     ano: yup.number().required(),
