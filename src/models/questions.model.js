@@ -8,11 +8,9 @@ const schema = new Schema(
     },
     vestibular: {
       type: String,
-      required: [true, 'vestibular é obrigatório'],
     },
     resolucao: {
       type: String,
-      required: [true, 'resolucao é obrigatório'],
     },
     enunciado: {
       type: String,
@@ -46,6 +44,7 @@ const schema = new Schema(
       transform: (_, ret) => {
         ret.id = ret._id;
 
+        delete ret.resolucao;
         delete ret._id;
         delete ret.__v;
 
