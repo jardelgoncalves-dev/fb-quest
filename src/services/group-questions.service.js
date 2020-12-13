@@ -1,5 +1,6 @@
 import { questionsSchema } from '@src/schema/questions.schema';
 import { successResponse } from '@src/utils/response';
+import { QUESTION_TYPES } from '@src/utils/constants';
 import { ServiceBase } from './service-base';
 
 export class GroupQuestionsService extends ServiceBase {
@@ -10,10 +11,6 @@ export class GroupQuestionsService extends ServiceBase {
       schema: questionsSchema,
       alias: 'materia/vestibular',
     });
-    this.types = Object.freeze({
-      MATERIA: 'MATERIA',
-      VESTIBULAR: 'VESTIBULAR',
-    });
   }
 
   async distinct(query = {}) {
@@ -21,12 +18,12 @@ export class GroupQuestionsService extends ServiceBase {
     const vestibularArr = await this.Model.find(query).distinct('vestibular');
 
     const materias = materiaArr.map((materia) => ({
-      name: materia,
-      tipo: this.types.MATERIA,
+      nome: materia,
+      tipo: QUESTION_TYPES.MATERIA,
     }));
     const vestibulares = vestibularArr.map((vestibular) => ({
-      name: vestibular,
-      tipo: this.types.VESTIBULAR,
+      nome: vestibular,
+      tipo: QUESTION_TYPES.VESTIBULAR,
     }));
 
     return successResponse([...vestibulares, ...materias], 200);
