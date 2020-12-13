@@ -58,7 +58,11 @@ export class ExamsService extends ServiceBase {
   }
 
   async verifyQuestion({ questionId, examId, alternativaId, usuario }) {
-    const exam = await this.Model.findOne({ _id: examId, usuario });
+    const exam = await this.Model.findOne({
+      _id: examId,
+      usuario,
+      status: STATUS.INICIADO,
+    });
     if (!exam)
       return errorResponse({ error: 'questionário não encontrado' }, 404);
 
@@ -76,6 +80,9 @@ export class ExamsService extends ServiceBase {
       (a) => String(a._id) === alternativaId
     );
 
+    if (!myResponse)
+      return errorResponse({ error: 'resposta não encontrado' }, 404);
+
     const [correct] = question.alternativas.filter((a) => a.correta);
 
     const isLastQuestion = exam.questoes.length - 1 === questionIndex;
@@ -83,6 +90,7 @@ export class ExamsService extends ServiceBase {
       ultimaQuestao: questionId,
       status: isLastQuestion ? STATUS.FINALIZADO : STATUS.INICIADO,
       acertos: myResponse.correta ? exam.acertos + 1 : exam.acertos,
+      ...(isLastQuestion && { tempoGasto: new Date().getTime() }),
     });
 
     await exam.save();
