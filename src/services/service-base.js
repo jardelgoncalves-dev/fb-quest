@@ -9,13 +9,21 @@ export class ServiceBase {
     this.alias = alias || 'recurso';
   }
 
+  handleError(error) {
+    if (error.message && /Cast to ObjectId/.test(error.message)) {
+      return errorResponse({ error: 'id informado é inválido' }, 400);
+    }
+    return errorResponse({ error: error.message }, 422);
+  }
+
   async _applySchema(fnOperation, data) {
     try {
       if (this.schema) await this.schema.validate(data);
-      return fnOperation();
+      const response = await fnOperation();
+      return response;
     } catch (error) {
       logger.error(`Validation Error: ${error.message}`);
-      return errorResponse({ error: error.message }, 422);
+      return this.handleError(error);
     }
   }
 
@@ -64,11 +72,21 @@ export class ServiceBase {
   }
 
   async findOne({ query = {}, populate = {} }) {
-    return this.doFindOne({ query, populate });
+    try {
+      const response = await this.doFindOne({ query, populate });
+      return response;
+    } catch (error) {
+      return this.handleError(error);
+    }
   }
 
   async findAll({ query = {}, populate = {} }) {
-    return this.doFindAll({ query, populate });
+    try {
+      const response = await this.doFindAll({ query, populate });
+      return response;
+    } catch (error) {
+      return this.handleError(error);
+    }
   }
 
   async update({ query = {}, data = {} }) {
@@ -76,6 +94,11 @@ export class ServiceBase {
   }
 
   async delete({ query }) {
-    return this.doDelete({ query });
+    try {
+      const response = await this.doDelete({ query });
+      return response;
+    } catch (error) {
+      return this.handleError(error);
+    }
   }
 }

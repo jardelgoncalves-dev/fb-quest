@@ -58,52 +58,56 @@ export class ExamsService extends ServiceBase {
   }
 
   async verifyQuestion({ questionId, examId, alternativaId, usuario }) {
-    const exam = await this.Model.findOne({
-      _id: examId,
-      usuario,
-      status: STATUS.INICIADO,
-    });
-    if (!exam)
-      return errorResponse({ error: 'questionário não encontrado' }, 404);
+    try {
+      const exam = await this.Model.findOne({
+        _id: examId,
+        usuario,
+        status: STATUS.INICIADO,
+      });
+      if (!exam)
+        return errorResponse({ error: 'questionário não encontrado' }, 404);
 
-    const questionIndex = exam.questoes.findIndex(
-      (q) => String(q) === questionId
-    );
-    if (questionIndex === -1)
-      return errorResponse({ error: 'questão não encontrado' }, 404);
+      const questionIndex = exam.questoes.findIndex(
+        (q) => String(q) === questionId
+      );
+      if (questionIndex === -1)
+        return errorResponse({ error: 'questão não encontrado' }, 404);
 
-    const question = await this.Question.findOne({ _id: questionId }).lean();
-    if (!question)
-      return errorResponse({ error: 'questão não encontrado' }, 404);
+      const question = await this.Question.findOne({ _id: questionId }).lean();
+      if (!question)
+        return errorResponse({ error: 'questão não encontrado' }, 404);
 
-    const [myResponse] = question.alternativas.filter(
-      (a) => String(a._id) === alternativaId
-    );
+      const [myResponse] = question.alternativas.filter(
+        (a) => String(a._id) === alternativaId
+      );
 
-    if (!myResponse)
-      return errorResponse({ error: 'resposta não encontrado' }, 404);
+      if (!myResponse)
+        return errorResponse({ error: 'resposta não encontrado' }, 404);
 
-    const [correct] = question.alternativas.filter((a) => a.correta);
+      const [correct] = question.alternativas.filter((a) => a.correta);
 
-    const isLastQuestion = exam.questoes.length - 1 === questionIndex;
-    exam.set({
-      ultimaQuestao: questionId,
-      status: isLastQuestion ? STATUS.FINALIZADO : STATUS.INICIADO,
-      acertos: myResponse.correta ? exam.acertos + 1 : exam.acertos,
-      ...(isLastQuestion && { tempoGasto: new Date().getTime() }),
-    });
+      const isLastQuestion = exam.questoes.length - 1 === questionIndex;
+      exam.set({
+        ultimaQuestao: questionId,
+        status: isLastQuestion ? STATUS.FINALIZADO : STATUS.INICIADO,
+        acertos: myResponse.correta ? exam.acertos + 1 : exam.acertos,
+        ...(isLastQuestion && { tempoGasto: new Date().getTime() }),
+      });
 
-    await exam.save();
+      await exam.save();
 
-    return successResponse(
-      {
-        correta: myResponse.correta,
-        detalhes: {
-          alternativa: correct,
-          resolucao: question.resolucao,
+      return successResponse(
+        {
+          correta: myResponse.correta,
+          detalhes: {
+            alternativa: correct,
+            resolucao: question.resolucao,
+          },
         },
-      },
-      200
-    );
+        200
+      );
+    } catch (error) {
+      return this.handleError(error);
+    }
   }
 }
