@@ -1,6 +1,7 @@
 import './utils/moduleAlias';
 import './utils/locale-yup';
 import express from 'express';
+import cors from 'cors';
 import expressPinoLogger from 'express-pino-logger';
 import logger from './logger';
 import * as database from './database';
@@ -24,6 +25,11 @@ export class Server {
     this.app.use(
       expressPinoLogger({
         logger,
+      })
+    );
+    this.app.use(
+      cors({
+        origin: '*',
       })
     );
   }
