@@ -5,14 +5,16 @@ import {
   Route,
 } from "react-router-dom";
 
+import { ProtectedRouter } from './ProtectedRouter'
 import { Login } from './pages/login'
+import { Home } from './pages/home'
 
 export const Routes = () => (
   <Router>
     <Switch>
       <Route exact path="/" component={Login} />
       <Route path="/register" component={() => <h1>register</h1>} />
-      <Route path="/home" component={() => <h1>Hello home</h1>} />
+      <ProtectedRouter path="/home" component={Home} />
     </Switch>
   </Router>
 )
