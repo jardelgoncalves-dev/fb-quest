@@ -34,3 +34,45 @@ export const ExitButton = styled.button`
     color: #fff;
   }
 `;
+
+export const CreateExamButton = styled.button`
+  height: 80px;
+  width: 100%;
+  border: 2px dashed #a9a9a9;
+  border-radius: 8px;
+  background-color: #a9a9a91a;
+  font-size: 17px;
+  font-weight: 600;
+  color: #a9a9a9;
+  cursor: pointer;
+  transition: all 0.2s;
+
+  &:hover {
+    border-color: #4bcc63;
+    color: #4bcc63;
+    background-color: #4bcc631a
+  }
+`;
+
+export const ExamItems = styled.button`
+  height: 64px;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 12px;
+  margin: 10px;
+  border: 2px solid #132;
+  color: #132;
+  border-radius: 8px;
+  background-color: transparent;
+  cursor: pointer;
+  font-size: 20px;
+  transition: all 0.2s;
+
+  &:hover {
+    background-color: #132;
+    color: #fff;
+  }
+
+`;
