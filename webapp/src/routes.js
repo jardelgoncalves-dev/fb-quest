@@ -8,6 +8,7 @@ import {
 import { ProtectedRouter } from './ProtectedRouter'
 import { Login } from './pages/login'
 import { Home } from './pages/home'
+import { Exam } from './pages/exam'
 
 export const Routes = () => (
   <Router>
@@ -15,6 +16,7 @@ export const Routes = () => (
       <Route exact path="/" component={Login} />
       <Route path="/register" component={() => <h1>register</h1>} />
       <ProtectedRouter path="/home" component={Home} />
+      <ProtectedRouter path="/exam/:id" component={Exam} />
     </Switch>
   </Router>
 )
