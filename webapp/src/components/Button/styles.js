@@ -4,7 +4,7 @@ export const Wrapper = styled.button`
   height: 64px;
   width: ${({ width }) => width || '200px'};
   border-radius: 8px;
-  background-color: #4bcc63;
+  background-color: ${({ bg }) => bg || '#4bcc63'};
   border: none;
   display: flex;
   align-items: center;
