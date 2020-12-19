@@ -1,6 +1,18 @@
+import { Link } from "react-router-dom";
 import styled from "styled-components";
 
-export const Wrapper = styled.div`
+export const Wrapper = styled(Link)`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  margin: 10px 0;
+  text-decoration: none;
+  color: #222;
+  width: 100%;
+`
+
+export const Container = styled.div`
   max-width: 400px;
   width: 100%;
   height: 200px;
@@ -12,7 +24,6 @@ export const Wrapper = styled.div`
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  margin: 10px 0;
 
   h1 {
     font-size: 30px;
@@ -33,7 +44,7 @@ export const Wrapper = styled.div`
     }
   }
 
-  button {
+  span.status {
     background-color: transparent;
     border: none;
     font-weight: 600;
