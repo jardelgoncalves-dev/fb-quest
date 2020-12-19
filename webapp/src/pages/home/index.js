@@ -10,7 +10,8 @@ import api from '../../services/api';
 export const Home = () => {
   const [state, setState] = useState({
     exams: [],
-    groups: []
+    groups: [],
+    exam: null,
   })
   const [error, setError] = useState(null)
   const [modal, setModal] = useState(false)
@@ -80,6 +81,9 @@ export const Home = () => {
             questoes={exam.questoes}
             status={exam.status}
             acertos={exam.acertos}
+            tempoFinal={exam.tempoGasto}
+            tempoInicio={exam.inicio}
+            href={`/exam/${exam.id}`}
           />
         ))}
 
