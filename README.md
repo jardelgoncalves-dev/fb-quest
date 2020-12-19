@@ -1,5 +1,5 @@
 # FB Quest
-an application to create questionnaires to test your knowledge
+An application to create questions and test your knowledge
 
 ## Install the dependencies for backend
 - Using npm
